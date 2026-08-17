@@ -6,11 +6,12 @@ const signToken = (user) =>
   jwt.sign({ id: user._id, role: user.role, name: user.name }, process.env.JWT_SECRET, {
     expiresIn: "7d",
   });
+const isProd = process.env.NODE_ENV === "production";
 
 const cookieOpts = {
   httpOnly: true,
-  sameSite: "lax",
-  secure: process.env.NODE_ENV === "production",
+  sameSite: isProd ? "none" : "lax",   // production mein "none" chahiye cross-site ke liye
+  secure: isProd,                       // "none" ke sath secure:true zaroori hai
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
